@@ -55,6 +55,7 @@ def display_result_card(result):
     <a href='{result['url']}#page={result['page']+1}' style='text-decoration: none; color: inherit;'>
         <div class="card">
             <h3>{class_name}</h3>
+            <a href='{result['url']}#page={result['page']+1}'>Click to open...</a>
             <p>Page Numer: {result['page']+1} | Vector Similarity: {result['similarities']}</p>
             <p>{result["text"]}</p>
         </div>
