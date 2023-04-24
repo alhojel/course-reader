@@ -6,13 +6,12 @@ import openai
 import os
 from openai.embeddings_utils import get_embedding
 
-openai.api_key = "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"
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 DATA_URL = "vector_database2.csv"
 
 @st.cache_data
 def blending_wonders():
     df = pd.read_csv(DATA_URL)
-    print(list(df.columns))
     df['embeddings'] = df['embeddings'].apply(ast.literal_eval)
     return df
 
