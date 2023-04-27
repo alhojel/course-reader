@@ -9,6 +9,8 @@ from openai.embeddings_utils import get_embedding
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 DATA_URL = "vector_database2.csv"
 
+
+
 @st.cache_data
 def blending_wonders():
     df = pd.read_csv(DATA_URL)
@@ -55,7 +57,7 @@ def display_result_card(result):
     <a href='{result['url']}#page={result['page']+1}' style='text-decoration: none; color: inherit;'>
         <div class="card">
             <h3>{class_name}</h3>
-            <a href='{result['url']}#page={result['page']+1}'>Click to open...</a>
+            <p >Click to open...</a>
             <p>Page Numer: {result['page']+1} | Vector Similarity: {result['similarities']}</p>
             <p>{result["text"]}</p>
         </div>
