@@ -6,7 +6,7 @@ import openai
 import os
 from openai.embeddings_utils import get_embedding
 
-openai.api_key = "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"
+openai.api_key =  st.secrets["OPENAI_API_KEY"]
 DATA_URL = "final_shrinked.csv"
 
 
