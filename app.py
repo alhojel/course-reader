@@ -6,9 +6,8 @@ import openai
 import os
 from openai.embeddings_utils import get_embedding
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-DATA_URL = "vector_database2.csv"
-
+openai.api_key = "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"
+DATA_URL = "final_shrinked.csv"
 
 
 @st.cache_data
@@ -39,7 +38,6 @@ def display_result_card(result):
         }
     </style>
     """
-
     class_name = f"{result['name']}"
     #class_code = f"Code: <a href='{result['url']}'>{result['url']}</a>"
     #class_id = f"Class ID: {result['Class ID']}"
@@ -58,8 +56,7 @@ def display_result_card(result):
         <div class="card">
             <h3>{class_name}</h3>
             <p >Click to open...</a>
-            <p>Page Numer: {result['page']+1} | Vector Similarity: {result['similarities']}</p>
-            <p>{result["text"]}</p>
+            <p>Page Numer: {result['page']+1} | Type: {result['type']} | Vector Similarity: {result['similarities']}</p>
         </div>
     </a>
     """
@@ -71,52 +68,28 @@ def main():
     st.markdown("<h1 style='text-align: center;'><a href='https://berkeley.streamlit.app/' style='text-decoration: none; color: inherit;'>EECS16B CourseReader 🚀</a></h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; margin-top: -10px; color: #ccc;'>Find that note you're looking for by searching for concepts using AI</p>", unsafe_allow_html=True)
 
-    # with st.expander('Add Filters'):
-    #     st.write("More filters coming soon 👀")
-    #     st.write('Units:')
-    #     col1, col2, col3, col4, col5 = st.columns(5)
-    #     unit_filters = {
-    #         '1 Unit': False,
-    #         '2 Units': False,
-    #         '3 Units': False,
-    #         '4 Units': False,
-    #         '5+ Units': False,
-    #     }
-    #     unit_filters['1 Unit'] = col1.checkbox('1 Unit', value=unit_filters['1 Unit'])
-    #     unit_filters['2 Units'] = col2.checkbox('2 Units', value=unit_filters['2 Units'])
-    #     unit_filters['3 Units'] = col3.checkbox('3 Units', value=unit_filters['3 Units'])
-    #     unit_filters['4 Units'] = col4.checkbox('4 Units', value=unit_filters['4 Units'])
-    #     unit_filters['5 Units'] = col5.checkbox('5+ Units', value=unit_filters['5+ Units'])
-
-    #     st.write("Course Level:")
-    #     col1, col2, col3, col4 = st.columns(4)
-    #     course_level_filters = {
-    #         '99': False,
-    #         '100': False,
-    #         '200': False,
-    #         '300': False,
-    #     }
-
-    #     course_level_filters['99'] = col1.checkbox('Lower Division', value=course_level_filters['99'])
-    #     course_level_filters['100'] = col2.checkbox('Upper Division', value=course_level_filters['100'])
-    #     course_level_filters['200'] = col3.checkbox('Graduate', value=course_level_filters['200'])
-    #     course_level_filters['300'] = col4.checkbox('Professional', value=course_level_filters['300'])
+    with st.expander('Add Filters'):
+        st.write("More filters coming soon 👀")
+        st.write('Resource Type:')
+        col1, col2, col3  = st.columns(3)
+        type_filters = {
+         'notes': False,
+            'homeworks': False,
+            'discussions': False,
+        }
+        type_filters['notes'] = col1.checkbox('Notes', value=type_filters['notes'])
+        type_filters['homeworks'] = col2.checkbox('Homeworks', value=type_filters['homeworks'])
+        type_filters['discussions'] = col3.checkbox('Discussions', value=type_filters['discussions'])
         
-    search_query = st.text_input("✨ Search for a note:", placeholder="What is a Full SVD?", key='search_input')
+    search_query = st.text_input("✨ Search for a note, homework, or discussion:", placeholder="What is a Full SVD?", key='search_input')
         
     if search_query:
         df = blending_wonders()
         
-        # Filter by the selected units
-        #selected_unit_filters = [unit[0] for unit, value in unit_filters.items() if value]
-        #if selected_unit_filters:
-        #    df = df[df['UnitDeranged'].apply(lambda x: any(val in selected_unit_filters for val in x))]
-        
-        # Filter by the selected course levels
-        #selected_level_filters = [unit[0] for unit, value in course_level_filters.items() if value]
-
-        #if selected_level_filters:
-        #    df = df[df['DIV'].apply(lambda x: any(val in selected_level_filters for val in x))]
+        # # Filter by the selected units
+        selected_type_filters = [unit[0] for unit, value in type_filters.items() if value]
+        if selected_type_filters:
+            df = df[df['type'].apply(lambda x: any(val in selected_type_filters for val in x))]
 
         results = brewing_magic(search_query, df)
         
